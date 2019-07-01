@@ -11,16 +11,12 @@ kmeans = KMeans(n_clusters=10, random_state=10)
 kmeans.fit(USE)
 all['cluster'] = kmeans.predict(all[['growth','inflation','liquidity','risk app', 'return']])
 
-#all.to_csv('output.csv')
-#print(all)
-
 combi = all.groupby(['cluster', 'type']).size().to_frame('count').reset_index()
-#print(combi)
 #combi.to_csv('centroidConcentration.csv')
 
 columns = ['Cluster No.%d' % x for x in combi['cluster'].unique()]
 rows = ('US Equities','DM ex US Equities','Asian Equities','China Equities','US Treasuries','US High Yield','Asian Credits','Oil','Gold','Copper')
-
+ 
 values = np.arange(0, 100, 5)
 value_increment = 5;
 
@@ -42,13 +38,11 @@ for x in combi['type'].unique():
             row_data.append(0)
         else:
             store = types.loc[types['cluster']==i]
-            #print("Cluster: " + str(i) + " type: " + str(x) + " count: "+ str(store['count'].values[0]) )
             row_data.append(store['count'].values[0])   
-    #print(row_data)
     data.append(row_data)
 
 legend =[] 
-#print(data)
+
 cell_text = []
 for row in range(n_rows):
     bar = plt.bar(index, np.array(data[row]),bar_width, bottom = y_offset, color=colors[row])
@@ -65,7 +59,7 @@ table = plt.table(cellText = cell_text,
                   rowColours = colors,
                   colLabels=columns,
                   loc='bottom')
-table.auto_set_font_size(False)
+table.auto_set_font_size(False) 
 table.set_fontsize(10)
 plt.ylabel("Count")
 plt.xticks([])
